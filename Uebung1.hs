@@ -1,43 +1,12 @@
 
 module Uebungen.Uebung1 where
 
-{- 
-
-    ## AUFGABE 1 ##
-
-    a)  -- 2 Punkte
-
-    Im Anhang (siehe unten in dieser Datei - 'schachfiguren', 
-    'schachfigurPositionenW') sind Ihnen Schachfiguren und Schachfigurpositionen
-    gegeben. Leider sind die Schachfigurpositionen nur für Weiß und nicht für
-    Schwarz vorhanden.
-
-    Schreiben Sie eine list comprehension, welche mithilfe der Liste
-    'schachfigurPositionenW' die Schachfigurpositionen für Schwarz ausgibt.
-
-    Die Bauernpositionen müssen an dieser Stelle nicht berücksichtigt werden.
-
--}
 
 import Data.List ((\\))
 schachfigurPositionenS:: [(Int, Char)]
 schachfigurPositionenS = [(8,y) | (_,y) <-schachfigurPositionenW]  
 
-{-
 
-    b)  -- 4 Punkte
-
-    Nun, da Sie die Schachfigurpositionen kennen, erstellen Sie Listen, welche
-    die Figuren mit ihren jeweiligen Positionen zusammenführen. Das heißt, Sie
-    haben dann Listen dessen Elemente Tuple sind, welche die Schachfigur und
-    die Position der Schachfigur beinhalten.
-
-    In dieser Teilaufgabe werden 4 Listen erwartet:
-
-    * Die Liste der Figuren für Weiß (ohne Bauern)
-    * Die Liste der Figuren für Schwarz (ohne Bauern)
-    * Zwei Listen für Bauern (einmal Bauern für Weiß und einmal für Schwarz)
--}
 
 schachfigurenMitPosW:: [(Schachfigur, (Int, Char))]
 schachfigurenMitPosW = zip schachfiguren schachfigurPositionenW 
@@ -51,16 +20,7 @@ bauernWeiß = zip (cycle [bauer]) [(2,y)| y <- ['a'..'h'] ]
 bauernSchwarz:: [(Schachfigur, (Int, Char))]
 bauernSchwarz = zip (cycle [bauer]) [(7,y)| y <- ['a'..'h'] ]
 
-{-
 
-    c) -- 4 Punkte
-
-    Erstellen Sie nun das endgültige Schachbrett. Führen Sie dazu Ihre Listen
-    aus Aufgabenteil (b) zusammen und ergänzen Sie alle leerstehenden Felder.
-
-    Die Reihenfolge der Felder bzw. der Figuren spielt keine Rolle, es sollen
-    lediglich keine Felder bzw. Figuren fehlen.
--}
 
 schachbrettMitFiguren:: [(Schachfigur, (Int, Char))]
 schachbrettMitFiguren = schachfigurenMitPosW ++ bauernWeiß ++
@@ -69,7 +29,7 @@ schachbrettMitFiguren = schachfigurenMitPosW ++ bauernWeiß ++
                                                , spalte <- ['a'..'h'] ]) ++ bauernSchwarz ++ schachfigurenMitPosS
 
 
--- | ## ANHANG ##
+
 
 type Schachfigur = String
 

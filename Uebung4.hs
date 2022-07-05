@@ -3,66 +3,12 @@ module Uebungen.Uebung4 where
 
 import Data.Array ( accumArray,  Ix, (!), Array )
 
-{-
-
-    In den dieswöchigen Praxisaufgaben geht es um das 'traveling salesperson
-    problem'. Dazu steht Ihnen ein Array
-    
-    karte:: Array (Stadtteil, Stadtteil) Int
-
-    zur Verfügung, welches die Distanzen zwischen den gegebenen Orten speichert.
-    Die Distanz zwischen zwei Orten kann über die Funktion
-
-    distanz:: Stadtteil -> Stadtteil -> Int
-
-    abgerufen werden.
-
-    Die Orte, welche besucht werden müssen, haben den Datentypen 'Stadtteil'
-    (siehe Anhang unten). Rundtouren im Sinne des TSPs werden als Listen der Form
-    '[Stadtteil]' gespeichert. In einer gültigen Rundtour muss jeder vorhandene
-    Ort genau einmal vorkommen.
-
-
-
-    ## AUFGABE 1 ##
-
-    a)  -- 2 Punkte
-
-    Implementieren Sie eine Funktion
-
-    routenLaenge:: [Stadtteil] -> Int,
-
-    welche für eine gegebene Liste von Stadtteilen, die eine ausgewählte Route
-    darstellt, die Routenlänge ausgibt.
-
-    Um die Distanz zwischen zwei Stadtteilen zu bestimmen, können Sie die
-    Funktion 'distanz' aus dem Anhang verwenden.
-
--}
 
 routenLaenge:: [Stadtteil] -> Int
 routenLaenge [] = 0
 routenLaenge (erstestadt :xs) = help (erstestadt :xs) 
    where help [letztestadt] = distanz letztestadt erstestadt 
          help (erstestadt' : zweitestatd : zs) = distanz erstestadt' zweitestatd + help (zweitestatd:zs) 
-{-
-
-    ## AUFGABE 1 ##
-
-    b)  -- 2 Punkte
-
-    Implementieren Sie eine Funktion
-
-    naechsterOrt:: Stadtteil -> [Stadtteil] -> Stadtteil,
-
-    welche mittels:
-
-    i)  dem aktuellen Standort (1. Parameter)
-    ii) Auswahlmöglichkeiten weiterer (noch nicht besuchter) Standorte (2. Parameter)
-
-    den Stadtteil mit der kürzesten Distanz zum aktuellen Standort bestimmt.
-
--}
 
 
 naechsterOrt:: Stadtteil -> [Stadtteil] -> Stadtteil
@@ -70,22 +16,6 @@ naechsterOrt stadtteil [] = stadtteil
 naechsterOrt stadtteil [x] = x 
 naechsterOrt stadtteil (x:y:ys) = if distanz stadtteil x <= distanz stadtteil y then x
                                                                                 else naechsterOrt stadtteil (ys)
-
-{-
-
-    ## AUFGABE 1 ##
-
-    c)  -- 3 Punkte
-
-    Implementieren Sie eine rekursive Funktion
-
-    opportunistischeSuche:: [Stadtteil] -> [Stadtteil], 
-
-    welche für eine gegebene Liste von Stadtteilen, die eine beliebige
-    TSP-Instanz repräsentiert, eine möglichst gute Lösung mittels der
-    opportunistischen Suche für das TSP-Problem bestimmt.
-
--}
 
 opportunistischeSuche:: [Stadtteil] -> [Stadtteil]
 opportunistischeSuche [] = []
@@ -97,18 +27,6 @@ opportunistischeSuche (x:y:ys) = x:(naechsterOrt x (y:ys)) : opportunistischeSuc
          loesche x (y:ys)  
                         | x == y  = ys
                         | otherwise = y : loesche x ys
-{-
-
-    d)  -- 2 Bonuspunkte
-
-    Implementieren Sie eine Funktion
-
-    permutationen:: Eq a => [a] -> [[a]],
-
-    welche alle möglichen Permutationen für eine gegebene Liste Elementen
-    (polymorpher Datentyp) erzeugt.
-
--}
 
 permutationen:: Eq a => [a] -> [[a]]
 permutationen [] = [[]]
@@ -121,31 +39,10 @@ permutationen (x:xs) = [ps++[x]++qs | rs <- permutationen xs ,(ps,qs) <- help' r
 
 
 
-{-
-
-    e)  -- 3 Punkte
-
-    Implementieren Sie eine rekursive Funktion
-
-    erschoepfendeSuche:: [Stadtteil] -> [Stadtteil],
-
-    welche für eine gegebene Liste von Stadtteilen, die eine beliebige
-    TSP-Instanz repräsentiert, die optimale Lösung mittels der erschöpfenden
-    Suche bestimmt.
-
-
-    * HINWEIS:
-
-    Hilfreich hierfür könnte die Funktion 'permutationen' aus Bonusaufgabenteil
-    (d) sein. Sollten Sie (d) nicht bearbeitet haben, so können Sie die Funktion
-    'permutations' aus dem Modul 'Data.List' verwenden.
-
--}
 
 erschoepfendeSuche:: [Stadtteil] -> [Stadtteil]
 erschoepfendeSuche xs = [] --minimum zip $ permutationen xs $ map (\x -> routenLaenge x ) permutationen xs  -- TODO
 
--- ## ANHANG ##
 
 data Stadtteil = AntiByte
                | Bytetown
@@ -218,15 +115,12 @@ karte = accumArray (+)
 
                       ((MuByte, MuByte), 0) ]
 
--- | Gibt die Distanz zwischen zwei Stadtteilen wieder.
 distanz:: Stadtteil -> Stadtteil -> Int
 distanz stadtteil1 stadtteil2 = karte ! (stadtteil1, stadtteil2)
 
--- | Liste aller Stadtteile, beginnend in ByteCenter
 alleStadtteile:: [Stadtteil]
 alleStadtteile = [AntiByte .. MuByte]
 
--- ## SPIELINTERFACE ##
 
 postRouteGS:: [Stadtteil]
 postRouteGS = opportunistischeSuche alleStadtteile
